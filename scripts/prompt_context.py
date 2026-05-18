@@ -53,7 +53,7 @@ def main() -> int:
     if prompt and repo.exists() and char_budget:
         results = search(repo, prompt, limit=limit, max_tier=max_tier)
         if results:
-            lines = ["Relevant context from fbrain:"]
+            lines = ["Relevant context from icontext:"]
             used_chars = len(lines[0])
             seen_paths: set[str] = set()
             for result in results:

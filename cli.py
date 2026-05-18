@@ -1042,8 +1042,8 @@ def main() -> int:
             "  fbrain connect linkedin --pdf ~/Downloads/Profile.pdf\n"
             "  fbrain sync\n"
             "\n"
-            "docs: https://floom.dev/fbrain\n"
-            "issues: https://github.com/floomhq/fbrain/issues"
+            "docs: https://floom.dev/docs\n"
+            "issues: https://github.com/floomhq/icontext/issues"
         ),
     )
     parser.add_argument(

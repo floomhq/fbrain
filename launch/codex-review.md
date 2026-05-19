@@ -106,12 +106,12 @@ Markdown files are rendered deterministically from JSON fields. No HTML comment 
 Each claim in the output carries:
 ```json
 {
-  "claim": "Cedrik is a high-frequency collaborator",
+  "claim": "Sam is a high-frequency collaborator",
   "evidence": ["gmail:c42"],
   "metric": "12 messages / 4 weeks, 3.0 per week, last seen 2026-04-30"
 }
 ```
-Final prose: "You email Cedrik about 3x/week" — only when the validator confirms the count. Low-confidence claims render with `[?]` or are omitted entirely.
+Final prose: "You email Sam about 3x/week" — only when the validator confirms the count. Low-confidence claims render with `[?]` or are omitted entirely.
 
 ### Gemini API features to use
 

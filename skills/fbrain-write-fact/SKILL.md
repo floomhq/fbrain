@@ -43,7 +43,7 @@ Examples: appending a new event to a legal incident `TIMELINE.md`, adding to a p
 
 Examples: company registration, EIN, VAT ID, articles of incorporation, jurisdiction, registered agent, attorney contact, contracts, NDAs, cap table entries.
 
-Route to `vault/legal/<entity>.md` (e.g. `vault/legal/floom-inc.md`, `vault/legal/scaile-gmbh.md`). Ongoing disputes go to `vault/legal/incidents/<incident>/`; contracts go to `vault/legal/contracts/<counterparty>.md`.
+Route to `vault/legal/<entity>.md` (e.g. `vault/legal/example-inc.md`, `vault/legal/example-gmbh.md`). Ongoing disputes go to `vault/legal/incidents/<incident>/`; contracts go to `vault/legal/contracts/<counterparty>.md`.
 
 ### Is it about a specific project?
 
@@ -55,7 +55,7 @@ Route to `vault/projects/<project>/<topic>.md` or `vault/projects/<project>/<str
 
 Examples: a team member's role and scope, an investor's interest area, a recurring collaborator's background, hiring notes.
 
-Route your own team to `vault/team/<entity>/<person>.md` (e.g. `vault/team/floom/cedrik.md`). Route external relationships you actively track to `vault/network/<person-or-org>.md`.
+Route your own team to `vault/team/<entity>/<person>.md` (e.g. `vault/team/example/sam.md`). Route external relationships you actively track to `vault/network/<person-or-org>.md`.
 
 ### Is it strategy or roadmap?
 
@@ -161,5 +161,5 @@ If a fact doesn't fit any category cleanly, ask the user where they want it befo
 - "Update the cursor-fraud incident with today's status" -> edit `vault/legal/incidents/cursor-fraud-2026-04-22/TIMELINE.md` (NOT log).
 - "Log that I sent the Finom letter today" -> append to `vault/secretary/logs/YYYY-MM.md` (NOT TIMELINE).
 - "Add Floom Inc registration details" -> write `vault/legal/floom-inc.md` (covered by the decision tree).
-- "Update Cedrik's status as collaborator" -> edit `vault/team/floom/cedrik.md` (NOT log).
+- "Update Sam's status as collaborator" -> edit `vault/team/example/sam.md` (NOT log).
 - "Lets update icontext" -> ambiguous; ask "what specifically? (a fact / a project status / an existing doc?)" before routing.

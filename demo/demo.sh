@@ -70,16 +70,16 @@ pause 1.5
 echo -e "  ${GREEN}Claude:${RESET} (reading internal/profile/user.md)"
 pause 0.6
 echo ""
-echo "  You're Federico de Ponte — technical founder working on Floom,"
-echo "  an AI app platform. Based at floom.dev. Previously built SCAILE"
-echo "  (\$600K ARR). Currently focused on the v26 launch."
+echo "  You're Alex Rivera — software engineer working on an open-source"
+echo "  developer tool. Based in Berlin. Previously shipped a CLI used"
+echo "  by 5k+ engineers. Currently focused on the v1.0 release."
 echo ""
 pause 0.4
-echo "  Key relationships: Cedrik (co-founder, daily), Marco (investor,"
-echo "  weekly), Sara (design lead, weekly)."
+echo "  Key relationships: Sam (co-maintainer, daily), Jordan (advisor,"
+echo "  monthly), Riley (designer, weekly)."
 echo ""
 pause 0.4
-echo "  Active threads: Floom launch, f.inc SF program, Rocketlist pipeline."
+echo "  Active threads: v1.0 release, OSS sponsorship review, docs revamp."
 echo ""
 pause 1.0
 hr

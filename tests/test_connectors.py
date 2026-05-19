@@ -498,7 +498,7 @@ class TestRelationshipSignal(unittest.TestCase):
     def test_keeps_real_relationship_with_multiple_messages(self):
         from connectors.gmail import _is_relationship_signal
         self.assertTrue(_is_relationship_signal(
-            5, "cedrik@example.com",
+            5, "sam@example.com",
             ["Floom roadmap", "Re: Floom roadmap", "Demo prep", "Follow-up"],
         ))
 
@@ -512,8 +512,8 @@ class TestRelationshipSignal(unittest.TestCase):
     def test_keeps_known_address_with_two_substantive_messages(self):
         from connectors.gmail import _is_relationship_signal
         self.assertTrue(_is_relationship_signal(
-            2, "simon@scaile.tech",
-            ["Re: SCAILE board prep", "Follow-up on Tuesday"],
+            2, "simon@opencli.example",
+            ["Re: OpenCLI release prep", "Follow-up on Tuesday"],
         ))
 
 
@@ -600,27 +600,27 @@ class TestRenderProfileMd(unittest.TestCase):
     def test_renders_full_profile(self):
         from connectors.gmail import _render_profile_md
         profile = {
-            "identity_summary": "You are Federico, building Floom.",
+            "identity_summary": "You are Alex, building OpenCLI.",
             "key_relationships": [
-                {"name": "Cedrik", "company": "Floom", "role": "Co-founder",
+                {"name": "Sam", "company": "OpenCLI", "role": "Co-maintainer",
                  "frequency": "weekly", "warmth": "hot", "context": "Daily collab"},
             ],
-            "recurring_topics": ["Floom launch", "v26 wireframes"],
+            "recurring_topics": ["OpenCLI launch", "v1.0 wireframes"],
             "active_projects": [
-                {"name": "Floom", "status": "shipping v26",
-                 "participants": ["Cedrik", "Simon"]},
+                {"name": "OpenCLI", "status": "shipping v1.0",
+                 "participants": ["Sam", "Simon"]},
             ],
-            "communication_patterns": "Mostly outbound to Floom team.",
-            "pending_items": ["Foreign founder application"],
-            "shareable_card": "Federico builds Floom.",
+            "communication_patterns": "Mostly outbound to OpenCLI team.",
+            "pending_items": ["Release checklist"],
+            "shareable_card": "Alex builds OpenCLI.",
         }
         md = _render_profile_md(profile, ["Gmail"], 90, ["alias@work.example"], "2026-05-02")
         self.assertIn("Identity Summary", md)
-        self.assertIn("You are Federico", md)
-        self.assertIn("| Cedrik |", md)
-        self.assertIn("Floom launch", md)
-        self.assertIn("**Floom**", md)
-        self.assertIn("Foreign founder application", md)
+        self.assertIn("You are Alex", md)
+        self.assertIn("| Sam |", md)
+        self.assertIn("OpenCLI launch", md)
+        self.assertIn("**OpenCLI**", md)
+        self.assertIn("Release checklist", md)
 
     def test_handles_empty_sections(self):
         from connectors.gmail import _render_profile_md
@@ -643,9 +643,9 @@ class TestRenderProfileMd(unittest.TestCase):
 
     def test_card_renders_as_safe_md(self):
         from connectors.gmail import _render_card_md
-        out = _render_card_md({"shareable_card": "Federico builds Floom."}, "2026-05-02")
+        out = _render_card_md({"shareable_card": "Alex builds OpenCLI."}, "2026-05-02")
         self.assertIn("shareable: true", out)
-        self.assertIn("Federico builds Floom.", out)
+        self.assertIn("Alex builds OpenCLI.", out)
 
 
 class TestBuildCompactFacts(unittest.TestCase):
@@ -686,8 +686,8 @@ class TestBuildCompactFacts(unittest.TestCase):
                 "subject": "Project plan",
                 "from_addrs": ["me@example.com"],
                 "from_pairs": [("Me", "me@example.com")],
-                "to": ["cedrik@example.com"],
-                "to_pairs": [("Cedrik", "cedrik@example.com")],
+                "to": ["sam@example.com"],
+                "to_pairs": [("Sam", "sam@example.com")],
                 "cc": [], "cc_pairs": [],
                 "date": "Mon, 01 Apr 2024 12:00:00 +0000",
             },
@@ -696,18 +696,18 @@ class TestBuildCompactFacts(unittest.TestCase):
                 "subject": "Re: Project plan",
                 "from_addrs": ["me@example.com"],
                 "from_pairs": [("Me", "me@example.com")],
-                "to": ["cedrik@example.com"],
-                "to_pairs": [("Cedrik", "cedrik@example.com")],
+                "to": ["sam@example.com"],
+                "to_pairs": [("Sam", "sam@example.com")],
                 "cc": [], "cc_pairs": [],
                 "date": "Tue, 02 Apr 2024 12:00:00 +0000",
             },
         ]
         facts = _build_compact_facts(msgs, own, scan_days=90)
         emails = {cp["email"]: cp for cp in facts["counterparties"]}
-        self.assertIn("cedrik@example.com", emails)
-        self.assertEqual(emails["cedrik@example.com"]["outbound"], 2)
-        self.assertEqual(emails["cedrik@example.com"]["inbound"], 0)
-        self.assertEqual(emails["cedrik@example.com"]["direction"], "you_send")
+        self.assertIn("sam@example.com", emails)
+        self.assertEqual(emails["sam@example.com"]["outbound"], 2)
+        self.assertEqual(emails["sam@example.com"]["inbound"], 0)
+        self.assertEqual(emails["sam@example.com"]["direction"], "you_send")
 
 
 class TestRunPipeline(unittest.TestCase):
@@ -718,38 +718,38 @@ class TestRunPipeline(unittest.TestCase):
         connector = MagicMock()
         extract_response = {
             "people": [
-                {"name": "Cedrik Coelho", "email": "cedrik@example.com",
-                 "company": "Floom", "evidence_messages": 6,
-                 "direction": "balanced", "topics": ["Floom"]},
+                {"name": "Sam Taylor", "email": "sam@example.com",
+                 "company": "OpenCLI", "evidence_messages": 6,
+                 "direction": "balanced", "topics": ["OpenCLI"]},
             ],
             "projects": [
-                {"name": "Floom v26",
-                 "evidence_subjects": ["Floom v26 plan", "Re: Floom v26 plan"]},
+                {"name": "OpenCLI v1.0",
+                 "evidence_subjects": ["OpenCLI v1.0 plan", "Re: OpenCLI v1.0 plan"]},
             ],
-            "topics": ["Floom"],
+            "topics": ["OpenCLI"],
         }
         profile_response = {
-            "identity_summary": "You build Floom.",
+            "identity_summary": "You build OpenCLI.",
             "key_relationships": [
-                {"name": "Cedrik", "company": "Floom", "role": "Co-founder",
+                {"name": "Sam", "company": "OpenCLI", "role": "Co-maintainer",
                  "frequency": "weekly", "warmth": "hot", "context": "Daily collab"},
             ],
-            "recurring_topics": ["Floom"],
-            "active_projects": [{"name": "Floom v26", "status": "shipping"}],
-            "communication_patterns": "Outbound to Floom team.",
+            "recurring_topics": ["OpenCLI"],
+            "active_projects": [{"name": "OpenCLI v1.0", "status": "shipping"}],
+            "communication_patterns": "Outbound to OpenCLI team.",
             "pending_items": [],
-            "shareable_card": "Federico builds Floom.",
+            "shareable_card": "Alex builds OpenCLI.",
         }
         connector.gemini_call_with_retry.side_effect = [extract_response, profile_response]
 
         msgs = [
             {
                 "direction": "sent",
-                "subject": f"Floom v26 plan {i}",
+                "subject": f"OpenCLI v1.0 plan {i}",
                 "from_addrs": ["me@example.com"],
                 "from_pairs": [("Me", "me@example.com")],
-                "to": ["cedrik@example.com"],
-                "to_pairs": [("Cedrik", "cedrik@example.com")],
+                "to": ["sam@example.com"],
+                "to_pairs": [("Sam", "sam@example.com")],
                 "cc": [], "cc_pairs": [],
                 "date": "Mon, 01 Apr 2024 12:00:00 +0000",
             } for i in range(3)
@@ -757,9 +757,9 @@ class TestRunPipeline(unittest.TestCase):
         msgs += [
             {
                 "direction": "inbox",
-                "subject": f"Re: Floom v26 plan {i}",
-                "from_addrs": ["cedrik@example.com"],
-                "from_pairs": [("Cedrik", "cedrik@example.com")],
+                "subject": f"Re: OpenCLI v1.0 plan {i}",
+                "from_addrs": ["sam@example.com"],
+                "from_pairs": [("Sam", "sam@example.com")],
                 "to": ["me@example.com"],
                 "to_pairs": [("Me", "me@example.com")],
                 "cc": [], "cc_pairs": [],
@@ -773,11 +773,11 @@ class TestRunPipeline(unittest.TestCase):
         self.assertEqual(connector.gemini_call_with_retry.call_count, 2)
         # Facts include the counterparty.
         cp_emails = [c["email"] for c in facts["counterparties"]]
-        self.assertIn("cedrik@example.com", cp_emails)
+        self.assertIn("sam@example.com", cp_emails)
         # Validated keeps the person.
         self.assertEqual(len(validated["people"]), 1)
         # Profile passes through.
-        self.assertEqual(profile["identity_summary"], "You build Floom.")
+        self.assertEqual(profile["identity_summary"], "You build OpenCLI.")
 
 
 class TestDetectOwnAddresses(unittest.TestCase):
@@ -804,12 +804,12 @@ class TestDetectOwnAddresses(unittest.TestCase):
             {
                 "direction": "sent",
                 "from_addrs": ["user@gmail.com"],
-                "to": ["cedrik@floom.dev"],
+                "to": ["sam@opencli.example"],
                 "cc": [],
             },
         ]
         own = _detect_own_addresses(msgs, {"user@gmail.com"})
-        self.assertNotIn("cedrik@floom.dev", own)
+        self.assertNotIn("sam@opencli.example", own)
 
     def test_ignores_inbox_messages(self):
         """An inbox From: matching ourselves should not be used to learn aliases."""
@@ -863,7 +863,7 @@ class TestPipelineDropsOwnAddressesFromRelationships(unittest.TestCase):
             # Stage A — extracted entities
             {
                 "people": [
-                    {"name": "Cedrik", "email": "cedrik@example.com",
+                    {"name": "Sam", "email": "sam@example.com",
                      "evidence_messages": 5, "direction": "balanced",
                      "topics": []},
                 ],
@@ -874,8 +874,8 @@ class TestPipelineDropsOwnAddressesFromRelationships(unittest.TestCase):
             {
                 "identity_summary": "You build Floom.",
                 "key_relationships": [
-                    {"name": "Cedrik", "email": "cedrik@example.com",
-                     "company": "Floom", "role": "Co-founder",
+                    {"name": "Sam", "email": "sam@example.com",
+                     "company": "OpenCLI", "role": "Co-maintainer",
                      "frequency": "weekly", "warmth": "hot",
                      "context": "Daily collab"},
                     {"name": "alias@work.example", "email": "alias@work.example",
@@ -883,8 +883,8 @@ class TestPipelineDropsOwnAddressesFromRelationships(unittest.TestCase):
                      "frequency": "monthly", "warmth": "hot",
                      "context": "Self-forward alias"},
                 ],
-                "recurring_topics": ["Floom"],
-                "active_projects": [{"name": "Floom"}],
+                "recurring_topics": ["OpenCLI"],
+                "active_projects": [{"name": "OpenCLI"}],
                 "communication_patterns": "Outbound to team.",
                 "pending_items": [
                     "Fix Vercel payment",
@@ -906,19 +906,19 @@ class TestPipelineDropsOwnAddressesFromRelationships(unittest.TestCase):
             },
             {
                 "direction": "sent",
-                "subject": "Floom plan",
+                "subject": "OpenCLI plan",
                 "from_addrs": ["me@example.com"],
                 "from_pairs": [("Me", "me@example.com")],
-                "to": ["cedrik@example.com"],
-                "to_pairs": [("Cedrik", "cedrik@example.com")],
+                "to": ["sam@example.com"],
+                "to_pairs": [("Sam", "sam@example.com")],
                 "cc": [], "cc_pairs": [],
                 "date": "Mon, 01 Apr 2024 12:00:00 +0000",
             },
             {
                 "direction": "inbox",
-                "subject": "Re: Floom plan",
-                "from_addrs": ["cedrik@example.com"],
-                "from_pairs": [("Cedrik", "cedrik@example.com")],
+                "subject": "Re: OpenCLI plan",
+                "from_addrs": ["sam@example.com"],
+                "from_pairs": [("Sam", "sam@example.com")],
                 "to": ["me@example.com"],
                 "to_pairs": [("Me", "me@example.com")],
                 "cc": [], "cc_pairs": [],

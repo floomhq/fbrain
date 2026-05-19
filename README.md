@@ -1,39 +1,32 @@
-# fbrain
+# icontext
 
-[![CI](https://github.com/floomhq/fbrain/actions/workflows/ci.yml/badge.svg)](https://github.com/floomhq/fbrain/actions/workflows/ci.yml)
+[![CI](https://github.com/floomhq/icontext/actions/workflows/ci.yml/badge.svg)](https://github.com/floomhq/icontext/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/downloads/)
-[![GitHub stars](https://img.shields.io/github/stars/floomhq/fbrain)](https://github.com/floomhq/fbrain/stargazers)
+[![GitHub stars](https://img.shields.io/github/stars/floomhq/icontext)](https://github.com/floomhq/icontext/stargazers)
 
-![fbrain demo](demo/icontext-demo.gif)
+![icontext demo](demo/icontext-demo.gif)
 
 **Your AI agents now share a brain.**
 
-fbrain is a folder + a set of skills. Your AI tools (Claude Code, Cursor, Codex) read from it before answering, and write to it as they learn about you. Local. Encrypted. No API keys.
+icontext is a folder + a set of skills. Your AI tools (Claude Code, Cursor, Codex) read from it before answering, and write to it as they learn about you. Local. Encrypted. No API keys.
 
 ## Quickstart
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/floomhq/fbrain/main/get.sh | bash
-fbrain init
-```
-
-Deprecated one-release alias, retained for existing install docs:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/floomhq/icontext/main/get.sh | bash
 icontext init
 ```
 
-Open Claude Code and say: **"Populate my fbrain profile."**
+Open Claude Code and say: **"Populate my icontext profile."**
 
 That's it. Your AI now has persistent memory.
 
 ## How it works
 
-fbrain is intentionally minimal infrastructure. Three pieces:
+icontext is intentionally minimal infrastructure. Three pieces:
 
-This diagram shows the default profile-building flow: agents try local sources in order, synthesize context inside the current AI session, and write plain Markdown into the shared vault. Claude Code, Cursor, Codex, and OpenCode then read the same three-tier context folder without needing a hosted fbrain service.
+This diagram shows the default profile-building flow: agents try local sources in order, synthesize context inside the current AI session, and write plain Markdown into the shared vault. Claude Code, Cursor, Codex, and OpenCode then read the same three-tier context folder without needing a hosted icontext service.
 
 ```mermaid
 flowchart TD
@@ -81,18 +74,18 @@ Every file is plain Markdown. Open it in a text editor, in Obsidian, or pipe it 
 
 ### 2. Skills — instructions your AI agent follows
 
-`fbrain init` installs four skills:
+`icontext init` installs four skills:
 
-- **fbrain-populate-profile** — builds the profile from real data sources
-- **fbrain-refresh-profile** — updates a stale profile
-- **fbrain-share-card** — regenerates the shareable summary
-- **fbrain-write-fact** — routes durable facts to the right vault location
+- **icontext-populate-profile** — builds the profile from real data sources
+- **icontext-refresh-profile** — updates a stale profile
+- **icontext-share-card** — regenerates the shareable summary
+- **icontext-write-fact** — routes durable facts to the right vault location
 
 Skills are Markdown files installed at:
-- `~/.claude/skills/fbrain-*/SKILL.md` (Claude Code)
-- `~/.cursor/rules/fbrain-*.mdc` (Cursor)
+- `~/.claude/skills/icontext-*/SKILL.md` (Claude Code)
+- `~/.cursor/rules/icontext-*.mdc` (Cursor; upgraded installs may also retain legacy `fbrain-*.mdc` rules)
 
-When you ask Claude Code "populate my fbrain profile", it discovers the skill via its description, reads the instructions, and executes them.
+When you ask Claude Code "populate my icontext profile", it discovers the skill via its description, reads the instructions, and executes them.
 
 ### 3. The synthesis pipeline
 
@@ -114,22 +107,22 @@ The agent extracts structured data from the source: people (with evidence_messag
 **Stage D — Markdown rendering:**
 Write four files (`user.md`, `relationships.md`, `projects.md`, `context-card.md`) using a fixed template. Roles and context columns are required (cite subject evidence, never blank). No HTML comment delimiters or fragile parsing.
 
-This is the same architecture as the optional headless `fbrain sync` (which uses Gemini 2.5 Flash Lite directly), just executed by the user's AI agent instead.
+This is the same architecture as the optional headless `icontext sync` (which uses Gemini 2.5 Flash Lite directly), just executed by the user's AI agent instead.
 
 ### Cross-tool: every agent reads the same folder
 
 | Tool | How it reads | How it writes |
 |---|---|---|
 | Claude Code | CLAUDE.md snippet + skill files | Skill file invocation |
-| Cursor | `.cursor/rules/fbrain-*.mdc` | Same skill instructions, Cursor-flavored |
-| Codex | reads vault directly (plain MD) | optional — `fbrain sync` |
-| OpenCode | reads vault directly (plain MD) | optional — `fbrain sync` |
+| Cursor | `.cursor/rules/icontext-*.mdc` | Same skill instructions, Cursor-flavored |
+| Codex | reads vault directly (plain MD) | optional — `icontext sync` |
+| OpenCode | reads vault directly (plain MD) | optional — `icontext sync` |
 
 Any tool that can read Markdown can read the vault. Any tool that can follow Markdown instructions can populate it.
 
 ### Privacy and security
 
-- **No external API calls by default.** Synthesis happens inside your AI agent's session. No fbrain server, no telemetry, no profile leaves your machine.
+- **No external API calls by default.** Synthesis happens inside your AI agent's session. No icontext server, no telemetry, no profile leaves your machine.
 - **Credentials in OS keychain.** Gmail App Passwords (only used for the optional headless `sync`) are stored via `keyring` — macOS Keychain, Linux Secret Service. Never in plaintext JSON.
 - **Vault tier encryption.** `vault/` is git-crypt encrypted at rest. `internal/` and `shareable/` are plaintext (designed to be portable and readable in Obsidian).
 - **Pre-commit secret scanning.** `gitleaks` runs on every commit if you push the vault to git.
@@ -164,12 +157,12 @@ GitHub        →  gitleaks + tier CI
 
 Synthesis runs inside your AI agent's session, not on a server. Default install requires no API keys. Email metadata never leaves your laptop.
 
-fbrain stores:
+icontext stores:
 
 - Your synthesized profile in `~/context/internal/profile/`. Plaintext on disk. Use FileVault.
 - Your vault secrets in `~/context/vault/`. Encrypted with `git-crypt`.
 
-fbrain does not run a server. No data is ever sent to any fbrain-controlled endpoint.
+icontext does not run a server. No data is ever sent to any icontext-controlled endpoint.
 
 Full threat model: see [SECURITY.md](SECURITY.md).
 
@@ -179,16 +172,16 @@ If you don't have Claude Code or Cursor and want a fully automated pipeline, the
 
 ```bash
 pip install fbrain[sync]
-fbrain connect gmail
-fbrain connect linkedin --pdf ~/Downloads/Profile.pdf
-fbrain sync
+icontext connect gmail
+icontext connect linkedin --pdf ~/Downloads/Profile.pdf
+icontext sync
 ```
 
 This requires `GEMINI_API_KEY` and runs the same 3-stage synthesis as the agent skill, but headlessly. Use it for CI, scripts, or non-agent environments.
 
 ## Features
 
-| Layer | What fbrain does |
+| Layer | What icontext does |
 |---|---|
 | Skills | Markdown instructions your agent follows to populate and refresh your profile. |
 | Encryption | `vault/**` is protected with `git-crypt` in Git and on GitHub. |
@@ -214,13 +207,6 @@ The classifier enforces content matches folder. Secrets are never allowed anywhe
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/floomhq/fbrain/main/get.sh | bash
-fbrain init
-```
-
-Deprecated alias for this release:
-
-```bash
 curl -fsSL https://raw.githubusercontent.com/floomhq/icontext/main/get.sh | bash
 icontext init
 ```
@@ -228,24 +214,24 @@ icontext init
 Or manually:
 
 ```bash
-git clone https://github.com/floomhq/fbrain ~/fbrain
-pip install -e ~/fbrain
-fbrain init
+git clone https://github.com/floomhq/icontext ~/icontext
+pip install -e ~/icontext
+icontext init
 ```
 
-`fbrain init` creates the vault, installs skills into `~/.claude/skills/` and `~/.cursor/rules/`, and adds a CLAUDE.md snippet so your agent loads the profile at session start.
+`icontext init` creates the vault, installs skills into `~/.claude/skills/` and `~/.cursor/rules/`, and adds a CLAUDE.md snippet so your agent loads the profile at session start.
 
 ### Skill management
 
 ```bash
-fbrain skills list      # show installed skills and where they live
-fbrain skills update    # pull latest skill versions from the fbrain repo
+icontext skills list      # show installed skills and where they live
+icontext skills update    # pull latest skill versions from the icontext repo
 ```
 
 ## Prove it works
 
 ```bash
-fbrain doctor
+icontext doctor
 ```
 
 The doctor command validates your install without starting background services or adding hosted dependencies.
@@ -253,10 +239,10 @@ The doctor command validates your install without starting background services o
 ## Uninstall
 
 ```bash
-bash ~/fbrain/uninstall.sh /path/to/vault
+bash ~/icontext/uninstall.sh /path/to/vault
 ```
 
-Uninstall removes fbrain-managed hooks, `.icontext/`, the GitHub Actions workflow, and the install manifest. It leaves your `shareable/`, `internal/`, and `vault/` content in place.
+Uninstall removes icontext-managed hooks, `.icontext/`, the GitHub Actions workflow, and the install manifest. It leaves your `shareable/`, `internal/`, and `vault/` content in place.
 
 ## Requirements
 
@@ -268,11 +254,11 @@ Optional:
 - `gitleaks` for secret scanning (`brew install gitleaks`)
 - `git-crypt` for vault encryption (`brew install git-crypt`)
 - `git-lfs` for binary assets (`brew install git-lfs`)
-- `GEMINI_API_KEY` only if you want the headless `fbrain sync` fallback
+- `GEMINI_API_KEY` only if you want the headless `icontext sync` fallback
 
 ## Multi-device sync
 
-Same vault, every machine. fbrain uses git on a private repo as the sync layer — no extra service, no daemon talking to a vendor.
+Same vault, every machine. icontext uses git on a private repo as the sync layer — no extra service, no daemon talking to a vendor.
 
 ### Setup (3 steps)
 
@@ -281,14 +267,14 @@ On your **primary machine**, push the vault to a private repo:
 ```bash
 cd ~/context
 gh repo create <user>/context --private --source=. --push
-fbrain autosync start          # commits + pushes every 60s
+icontext autosync start          # commits + pushes every 60s
 ```
 
 On every **other machine**, clone and start autosync:
 
 ```bash
 gh repo clone <user>/context ~/context
-fbrain autosync start
+icontext autosync start
 ```
 
 That's it. Edits made on machine A appear on machine B within ~60s of the next prompt (the `user-prompt-submit` hook also pulls in the background whenever you start a Claude Code prompt).
@@ -297,15 +283,15 @@ That's it. Edits made on machine A appear on machine B within ~60s of the next p
 
 | Command | What it does |
 |---|---|
-| `fbrain push` | Commit local changes and push to origin |
-| `fbrain pull` | Rebase against origin (autostashes in-flight changes) |
-| `fbrain autosync start` | Install + start the 60s background agent |
-| `fbrain autosync stop` | Stop and remove the agent |
-| `fbrain autosync status` | Show running state and last sync time |
+| `icontext push` | Commit local changes and push to origin |
+| `icontext pull` | Rebase against origin (autostashes in-flight changes) |
+| `icontext autosync start` | Install + start the 60s background agent |
+| `icontext autosync stop` | Stop and remove the agent |
+| `icontext autosync status` | Show running state and last sync time |
 
 ### Conflict handling
 
-`fbrain pull` runs `git pull --rebase --autostash`. Last writer wins. If two machines edit the same lines of the same file in the same minute, the rebase surfaces the conflict and prints the file paths — resolve manually with normal git tooling.
+`icontext pull` runs `git pull --rebase --autostash`. Last writer wins. If two machines edit the same lines of the same file in the same minute, the rebase surfaces the conflict and prints the file paths — resolve manually with normal git tooling.
 
 In practice, conflicts are rare: profile files are append-mostly, and the 60s push window is shorter than typical edit cycles.
 
@@ -314,27 +300,27 @@ In practice, conflicts are rare: profile files are append-mostly, and the 60s pu
 - macOS: `launchd` agent at `~/Library/LaunchAgents/dev.fbrain.autosync.plist`. Logs at `~/Library/Logs/fbrain.log`.
 - Linux: `systemd --user` timer at `~/.config/systemd/user/fbrain-autosync.timer`. Logs via `journalctl --user -u fbrain-autosync.service`.
 
-## How fbrain compares
+## How icontext compares
 
 Common question: "isn't this just like X?"
 
-| | What it is | How fbrain is different |
+| | What it is | How icontext is different |
 |---|---|---|
-| **mem0 / Letta / Zep** | Memory libraries for developers building agents | fbrain is for end users; you don't write code to use it |
-| **OpenMemory** | Local CLI + MCP for AI memory | OpenMemory's memory is reactive (built from chat history). fbrain is proactive (built from your real data: Gmail, LinkedIn) |
-| **Obsidian** | Knowledge base for humans | Obsidian is for humans writing notes; fbrain is for AI agents writing context. Same folder works for both — open ~/context in Obsidian for the human view. |
-| **Pieces.app** | OS-level capture for developers | Pieces captures what you do; fbrain synthesizes who you are. Different layer. |
-| **Claude Code's CLAUDE.md** | Per-project AI instructions | CLAUDE.md is per-project. fbrain is your *identity* — the same context every project uses. |
-| **Cursor Rules / .cursorrules** | Cursor-specific instructions | fbrain works across Claude Code, Cursor, Codex, OpenCode via MCP and shared file conventions. Tool-agnostic. |
+| **mem0 / Letta / Zep** | Memory libraries for developers building agents | icontext is for end users; you don't write code to use it |
+| **OpenMemory** | Local CLI + MCP for AI memory | OpenMemory's memory is reactive (built from chat history). icontext is proactive (built from your real data: Gmail, LinkedIn) |
+| **Obsidian** | Knowledge base for humans | Obsidian is for humans writing notes; icontext is for AI agents writing context. Same folder works for both — open ~/context in Obsidian for the human view. |
+| **Pieces.app** | OS-level capture for developers | Pieces captures what you do; icontext synthesizes who you are. Different layer. |
+| **Claude Code's CLAUDE.md** | Per-project AI instructions | CLAUDE.md is per-project. icontext is your *identity* — the same context every project uses. |
+| **Cursor Rules / .cursorrules** | Cursor-specific instructions | icontext works across Claude Code, Cursor, Codex, OpenCode via MCP and shared file conventions. Tool-agnostic. |
 
-The wedge: **fbrain is the only tool that proactively builds your professional identity from sources you already own (Gmail, LinkedIn) and exposes it to every AI tool you use.**
+The wedge: **icontext is the only tool that proactively builds your professional identity from sources you already own (Gmail, LinkedIn) and exposes it to every AI tool you use.**
 
 ## Status
 
-Production-ready. Run `fbrain doctor` to verify your install.
+Production-ready. Run `icontext doctor` to verify your install.
 
 > Social preview image at `assets/og-image.png` — upload via Settings → Social preview
 
-## Built with fbrain
+## Built with icontext
 
-*Share your setup: tag #fbrain on Twitter/X*
+*Share your setup: tag #icontext on Twitter/X*

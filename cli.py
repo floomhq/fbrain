@@ -1042,7 +1042,7 @@ def main() -> int:
             "  fbrain connect linkedin --pdf ~/Downloads/Profile.pdf\n"
             "  fbrain sync\n"
             "\n"
-            "docs: https://floom.dev/docs\n"
+            "docs: https://github.com/floomhq/icontext\n"
             "issues: https://github.com/floomhq/icontext/issues"
         ),
     )

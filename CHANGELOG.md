@@ -97,7 +97,7 @@ A Kimi session received "lets update icontext?" and did not pattern-match the sk
 ### Fixed
 - f-string syntax error in `cmd_init` final message (220e187)
 - IMAP timeout on slow connections
-- Self-relationship detection: filter out fede@floom.dev style alias addresses
+- Self-relationship detection: filter out user@example.com style alias addresses
 - SaaS welcome senders no longer hallucinate as key relationships
 - Direction conflation in email parsing
 - RFC 2822 folded header support via `email.parser.BytesParser`

@@ -27,20 +27,20 @@ class IcontextIndexMcpTests(unittest.TestCase):
             root = Path(tmp)
             init_repo(root)
             (root / "vault" / "strategy").mkdir(parents=True)
-            (root / "vault" / "strategy" / "openpaper.md").write_text(
-                "OpenPaper roadmap: citations and academic search.\n", encoding="utf-8"
+            (root / "vault" / "strategy" / "research-notes.md").write_text(
+                "Research notes roadmap: citations and academic search.\n", encoding="utf-8"
             )
             subprocess.run(["git", "add", "."], cwd=root, check=True)
             subprocess.run(["git", "commit", "-m", "init"], cwd=root, check=True, stdout=subprocess.PIPE)
 
             indexed = rebuild(root)
             results = search(root, "academic citations", limit=3)
-            text = read_text(root, "vault/strategy/openpaper.md")
+            text = read_text(root, "vault/strategy/research-notes.md")
             append_log(root, "vault/secretary/logs/icontext.md", "- test log")
 
         self.assertEqual(indexed, 1)
-        self.assertEqual(results[0].path, "vault/strategy/openpaper.md")
-        self.assertIn("OpenPaper roadmap", text)
+        self.assertEqual(results[0].path, "vault/strategy/research-notes.md")
+        self.assertIn("Research notes roadmap", text)
 
     def test_mcp_tool_calls(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -48,7 +48,7 @@ class IcontextIndexMcpTests(unittest.TestCase):
             init_repo(root)
             (root / "vault").mkdir()
             (root / "vault" / "note.md").write_text(
-                "Rocketlist onboarding and investor notes.\n", encoding="utf-8"
+                "Example app onboarding and investor notes.\n", encoding="utf-8"
             )
             subprocess.run(["git", "add", "."], cwd=root, check=True)
             subprocess.run(["git", "commit", "-m", "init"], cwd=root, check=True, stdout=subprocess.PIPE)
@@ -57,7 +57,7 @@ class IcontextIndexMcpTests(unittest.TestCase):
             server = Server(root)
             tools = server.handle("tools/list", {})
             result = server.call_tool(
-                {"name": "search_vault", "arguments": {"query": "Rocketlist investor"}}
+                {"name": "search_vault", "arguments": {"query": "Example investor"}}
             )
             payload = json.loads(result["content"][0]["text"])
 

@@ -49,7 +49,7 @@ Route to `vault/legal/<entity>.md` (e.g. `vault/legal/example-inc.md`, `vault/le
 
 Examples: launch plans, user research, technical decisions, project status, KPIs, GTM specifics, workplans, feature flags, error logs tied to a project.
 
-Route to `vault/projects/<project>/<topic>.md` or `vault/projects/<project>/<stream>/<topic>.md`. Known project slugs: `floom`, `rocketlist`, `openpaper`, `signaldash`, `cheers`, `agora`, `hyperniche`.
+Route to `vault/projects/<project>/<topic>.md` or `vault/projects/<project>/<stream>/<topic>.md`. Examples of project slugs: `my-app`, `internal-tool`, `client-website` (use whatever your projects are named).
 
 ### Is it about a person on your team or in your network?
 
